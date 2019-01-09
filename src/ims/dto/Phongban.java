@@ -6,7 +6,7 @@
 package ims.dto;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -23,6 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "phongban")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Phongban.findAll", query = "SELECT p FROM Phongban p")})
 public class Phongban implements Serializable {
@@ -36,7 +39,7 @@ public class Phongban implements Serializable {
     @Column(name = "ten", nullable = false, length = 255)
     private String ten;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idphongban")
-    private Collection<Nhanvien> nhanvienCollection;
+    private List<Nhanvien> nhanvienList;
 
     public Phongban() {
     }
@@ -66,12 +69,13 @@ public class Phongban implements Serializable {
         this.ten = ten;
     }
 
-    public Collection<Nhanvien> getNhanvienCollection() {
-        return nhanvienCollection;
+    @XmlTransient
+    public List<Nhanvien> getNhanvienList() {
+        return nhanvienList;
     }
 
-    public void setNhanvienCollection(Collection<Nhanvien> nhanvienCollection) {
-        this.nhanvienCollection = nhanvienCollection;
+    public void setNhanvienList(List<Nhanvien> nhanvienList) {
+        this.nhanvienList = nhanvienList;
     }
 
     @Override

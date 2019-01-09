@@ -9,7 +9,7 @@
     <class>ims.dto.Giadinh</class>
     <class>ims.dto.Quoctich</class>
     <class>ims.dto.Phongban</class>
-    <class>ims.dto.To</class>
+    <class>ims.dto.Tophong</class>
     <class>ims.dto.Dantoc</class>
     <class>ims.dto.Doi</class>
     <class>ims.dto.Noisinhsong</class>

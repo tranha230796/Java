@@ -16,7 +16,6 @@ import javax.persistence.criteria.Root;
 import ims.dto.Nhanvien;
 import ims.dto.Noisinhsong;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class NoisinhsongJpaController implements Serializable {
     }
 
     public void create(Noisinhsong noisinhsong) throws PreexistingEntityException, Exception {
-        if (noisinhsong.getNhanvienCollection() == null) {
-            noisinhsong.setNhanvienCollection(new ArrayList<Nhanvien>());
+        if (noisinhsong.getNhanvienList() == null) {
+            noisinhsong.setNhanvienList(new ArrayList<Nhanvien>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Nhanvien> attachedNhanvienCollection = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNhanvienToAttach : noisinhsong.getNhanvienCollection()) {
-                nhanvienCollectionNhanvienToAttach = em.getReference(nhanvienCollectionNhanvienToAttach.getClass(), nhanvienCollectionNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollection.add(nhanvienCollectionNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienList = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNhanvienToAttach : noisinhsong.getNhanvienList()) {
+                nhanvienListNhanvienToAttach = em.getReference(nhanvienListNhanvienToAttach.getClass(), nhanvienListNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienList.add(nhanvienListNhanvienToAttach);
             }
-            noisinhsong.setNhanvienCollection(attachedNhanvienCollection);
+            noisinhsong.setNhanvienList(attachedNhanvienList);
             em.persist(noisinhsong);
-            for (Nhanvien nhanvienCollectionNhanvien : noisinhsong.getNhanvienCollection()) {
-                Noisinhsong oldIdnoisinhsongOfNhanvienCollectionNhanvien = nhanvienCollectionNhanvien.getIdnoisinhsong();
-                nhanvienCollectionNhanvien.setIdnoisinhsong(noisinhsong);
-                nhanvienCollectionNhanvien = em.merge(nhanvienCollectionNhanvien);
-                if (oldIdnoisinhsongOfNhanvienCollectionNhanvien != null) {
-                    oldIdnoisinhsongOfNhanvienCollectionNhanvien.getNhanvienCollection().remove(nhanvienCollectionNhanvien);
-                    oldIdnoisinhsongOfNhanvienCollectionNhanvien = em.merge(oldIdnoisinhsongOfNhanvienCollectionNhanvien);
+            for (Nhanvien nhanvienListNhanvien : noisinhsong.getNhanvienList()) {
+                Noisinhsong oldIdnoisinhsongOfNhanvienListNhanvien = nhanvienListNhanvien.getIdnoisinhsong();
+                nhanvienListNhanvien.setIdnoisinhsong(noisinhsong);
+                nhanvienListNhanvien = em.merge(nhanvienListNhanvien);
+                if (oldIdnoisinhsongOfNhanvienListNhanvien != null) {
+                    oldIdnoisinhsongOfNhanvienListNhanvien.getNhanvienList().remove(nhanvienListNhanvien);
+                    oldIdnoisinhsongOfNhanvienListNhanvien = em.merge(oldIdnoisinhsongOfNhanvienListNhanvien);
                 }
             }
             em.getTransaction().commit();
@@ -79,36 +78,36 @@ public class NoisinhsongJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Noisinhsong persistentNoisinhsong = em.find(Noisinhsong.class, noisinhsong.getIdnoisinhsong());
-            Collection<Nhanvien> nhanvienCollectionOld = persistentNoisinhsong.getNhanvienCollection();
-            Collection<Nhanvien> nhanvienCollectionNew = noisinhsong.getNhanvienCollection();
+            List<Nhanvien> nhanvienListOld = persistentNoisinhsong.getNhanvienList();
+            List<Nhanvien> nhanvienListNew = noisinhsong.getNhanvienList();
             List<String> illegalOrphanMessages = null;
-            for (Nhanvien nhanvienCollectionOldNhanvien : nhanvienCollectionOld) {
-                if (!nhanvienCollectionNew.contains(nhanvienCollectionOldNhanvien)) {
+            for (Nhanvien nhanvienListOldNhanvien : nhanvienListOld) {
+                if (!nhanvienListNew.contains(nhanvienListOldNhanvien)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienCollectionOldNhanvien + " since its idnoisinhsong field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienListOldNhanvien + " since its idnoisinhsong field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Nhanvien> attachedNhanvienCollectionNew = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNewNhanvienToAttach : nhanvienCollectionNew) {
-                nhanvienCollectionNewNhanvienToAttach = em.getReference(nhanvienCollectionNewNhanvienToAttach.getClass(), nhanvienCollectionNewNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollectionNew.add(nhanvienCollectionNewNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienListNew = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNewNhanvienToAttach : nhanvienListNew) {
+                nhanvienListNewNhanvienToAttach = em.getReference(nhanvienListNewNhanvienToAttach.getClass(), nhanvienListNewNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienListNew.add(nhanvienListNewNhanvienToAttach);
             }
-            nhanvienCollectionNew = attachedNhanvienCollectionNew;
-            noisinhsong.setNhanvienCollection(nhanvienCollectionNew);
+            nhanvienListNew = attachedNhanvienListNew;
+            noisinhsong.setNhanvienList(nhanvienListNew);
             noisinhsong = em.merge(noisinhsong);
-            for (Nhanvien nhanvienCollectionNewNhanvien : nhanvienCollectionNew) {
-                if (!nhanvienCollectionOld.contains(nhanvienCollectionNewNhanvien)) {
-                    Noisinhsong oldIdnoisinhsongOfNhanvienCollectionNewNhanvien = nhanvienCollectionNewNhanvien.getIdnoisinhsong();
-                    nhanvienCollectionNewNhanvien.setIdnoisinhsong(noisinhsong);
-                    nhanvienCollectionNewNhanvien = em.merge(nhanvienCollectionNewNhanvien);
-                    if (oldIdnoisinhsongOfNhanvienCollectionNewNhanvien != null && !oldIdnoisinhsongOfNhanvienCollectionNewNhanvien.equals(noisinhsong)) {
-                        oldIdnoisinhsongOfNhanvienCollectionNewNhanvien.getNhanvienCollection().remove(nhanvienCollectionNewNhanvien);
-                        oldIdnoisinhsongOfNhanvienCollectionNewNhanvien = em.merge(oldIdnoisinhsongOfNhanvienCollectionNewNhanvien);
+            for (Nhanvien nhanvienListNewNhanvien : nhanvienListNew) {
+                if (!nhanvienListOld.contains(nhanvienListNewNhanvien)) {
+                    Noisinhsong oldIdnoisinhsongOfNhanvienListNewNhanvien = nhanvienListNewNhanvien.getIdnoisinhsong();
+                    nhanvienListNewNhanvien.setIdnoisinhsong(noisinhsong);
+                    nhanvienListNewNhanvien = em.merge(nhanvienListNewNhanvien);
+                    if (oldIdnoisinhsongOfNhanvienListNewNhanvien != null && !oldIdnoisinhsongOfNhanvienListNewNhanvien.equals(noisinhsong)) {
+                        oldIdnoisinhsongOfNhanvienListNewNhanvien.getNhanvienList().remove(nhanvienListNewNhanvien);
+                        oldIdnoisinhsongOfNhanvienListNewNhanvien = em.merge(oldIdnoisinhsongOfNhanvienListNewNhanvien);
                     }
                 }
             }
@@ -142,12 +141,12 @@ public class NoisinhsongJpaController implements Serializable {
                 throw new NonexistentEntityException("The noisinhsong with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Nhanvien> nhanvienCollectionOrphanCheck = noisinhsong.getNhanvienCollection();
-            for (Nhanvien nhanvienCollectionOrphanCheckNhanvien : nhanvienCollectionOrphanCheck) {
+            List<Nhanvien> nhanvienListOrphanCheck = noisinhsong.getNhanvienList();
+            for (Nhanvien nhanvienListOrphanCheckNhanvien : nhanvienListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Noisinhsong (" + noisinhsong + ") cannot be destroyed since the Nhanvien " + nhanvienCollectionOrphanCheckNhanvien + " in its nhanvienCollection field has a non-nullable idnoisinhsong field.");
+                illegalOrphanMessages.add("This Noisinhsong (" + noisinhsong + ") cannot be destroyed since the Nhanvien " + nhanvienListOrphanCheckNhanvien + " in its nhanvienList field has a non-nullable idnoisinhsong field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

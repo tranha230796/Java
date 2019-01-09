@@ -16,7 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import ims.dto.Nhanvien;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class DantocJpaController implements Serializable {
     }
 
     public void create(Dantoc dantoc) throws PreexistingEntityException, Exception {
-        if (dantoc.getNhanvienCollection() == null) {
-            dantoc.setNhanvienCollection(new ArrayList<Nhanvien>());
+        if (dantoc.getNhanvienList() == null) {
+            dantoc.setNhanvienList(new ArrayList<Nhanvien>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Nhanvien> attachedNhanvienCollection = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNhanvienToAttach : dantoc.getNhanvienCollection()) {
-                nhanvienCollectionNhanvienToAttach = em.getReference(nhanvienCollectionNhanvienToAttach.getClass(), nhanvienCollectionNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollection.add(nhanvienCollectionNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienList = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNhanvienToAttach : dantoc.getNhanvienList()) {
+                nhanvienListNhanvienToAttach = em.getReference(nhanvienListNhanvienToAttach.getClass(), nhanvienListNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienList.add(nhanvienListNhanvienToAttach);
             }
-            dantoc.setNhanvienCollection(attachedNhanvienCollection);
+            dantoc.setNhanvienList(attachedNhanvienList);
             em.persist(dantoc);
-            for (Nhanvien nhanvienCollectionNhanvien : dantoc.getNhanvienCollection()) {
-                Dantoc oldIddantocOfNhanvienCollectionNhanvien = nhanvienCollectionNhanvien.getIddantoc();
-                nhanvienCollectionNhanvien.setIddantoc(dantoc);
-                nhanvienCollectionNhanvien = em.merge(nhanvienCollectionNhanvien);
-                if (oldIddantocOfNhanvienCollectionNhanvien != null) {
-                    oldIddantocOfNhanvienCollectionNhanvien.getNhanvienCollection().remove(nhanvienCollectionNhanvien);
-                    oldIddantocOfNhanvienCollectionNhanvien = em.merge(oldIddantocOfNhanvienCollectionNhanvien);
+            for (Nhanvien nhanvienListNhanvien : dantoc.getNhanvienList()) {
+                Dantoc oldIddantocOfNhanvienListNhanvien = nhanvienListNhanvien.getIddantoc();
+                nhanvienListNhanvien.setIddantoc(dantoc);
+                nhanvienListNhanvien = em.merge(nhanvienListNhanvien);
+                if (oldIddantocOfNhanvienListNhanvien != null) {
+                    oldIddantocOfNhanvienListNhanvien.getNhanvienList().remove(nhanvienListNhanvien);
+                    oldIddantocOfNhanvienListNhanvien = em.merge(oldIddantocOfNhanvienListNhanvien);
                 }
             }
             em.getTransaction().commit();
@@ -79,36 +78,36 @@ public class DantocJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Dantoc persistentDantoc = em.find(Dantoc.class, dantoc.getIddantoc());
-            Collection<Nhanvien> nhanvienCollectionOld = persistentDantoc.getNhanvienCollection();
-            Collection<Nhanvien> nhanvienCollectionNew = dantoc.getNhanvienCollection();
+            List<Nhanvien> nhanvienListOld = persistentDantoc.getNhanvienList();
+            List<Nhanvien> nhanvienListNew = dantoc.getNhanvienList();
             List<String> illegalOrphanMessages = null;
-            for (Nhanvien nhanvienCollectionOldNhanvien : nhanvienCollectionOld) {
-                if (!nhanvienCollectionNew.contains(nhanvienCollectionOldNhanvien)) {
+            for (Nhanvien nhanvienListOldNhanvien : nhanvienListOld) {
+                if (!nhanvienListNew.contains(nhanvienListOldNhanvien)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienCollectionOldNhanvien + " since its iddantoc field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienListOldNhanvien + " since its iddantoc field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Nhanvien> attachedNhanvienCollectionNew = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNewNhanvienToAttach : nhanvienCollectionNew) {
-                nhanvienCollectionNewNhanvienToAttach = em.getReference(nhanvienCollectionNewNhanvienToAttach.getClass(), nhanvienCollectionNewNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollectionNew.add(nhanvienCollectionNewNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienListNew = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNewNhanvienToAttach : nhanvienListNew) {
+                nhanvienListNewNhanvienToAttach = em.getReference(nhanvienListNewNhanvienToAttach.getClass(), nhanvienListNewNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienListNew.add(nhanvienListNewNhanvienToAttach);
             }
-            nhanvienCollectionNew = attachedNhanvienCollectionNew;
-            dantoc.setNhanvienCollection(nhanvienCollectionNew);
+            nhanvienListNew = attachedNhanvienListNew;
+            dantoc.setNhanvienList(nhanvienListNew);
             dantoc = em.merge(dantoc);
-            for (Nhanvien nhanvienCollectionNewNhanvien : nhanvienCollectionNew) {
-                if (!nhanvienCollectionOld.contains(nhanvienCollectionNewNhanvien)) {
-                    Dantoc oldIddantocOfNhanvienCollectionNewNhanvien = nhanvienCollectionNewNhanvien.getIddantoc();
-                    nhanvienCollectionNewNhanvien.setIddantoc(dantoc);
-                    nhanvienCollectionNewNhanvien = em.merge(nhanvienCollectionNewNhanvien);
-                    if (oldIddantocOfNhanvienCollectionNewNhanvien != null && !oldIddantocOfNhanvienCollectionNewNhanvien.equals(dantoc)) {
-                        oldIddantocOfNhanvienCollectionNewNhanvien.getNhanvienCollection().remove(nhanvienCollectionNewNhanvien);
-                        oldIddantocOfNhanvienCollectionNewNhanvien = em.merge(oldIddantocOfNhanvienCollectionNewNhanvien);
+            for (Nhanvien nhanvienListNewNhanvien : nhanvienListNew) {
+                if (!nhanvienListOld.contains(nhanvienListNewNhanvien)) {
+                    Dantoc oldIddantocOfNhanvienListNewNhanvien = nhanvienListNewNhanvien.getIddantoc();
+                    nhanvienListNewNhanvien.setIddantoc(dantoc);
+                    nhanvienListNewNhanvien = em.merge(nhanvienListNewNhanvien);
+                    if (oldIddantocOfNhanvienListNewNhanvien != null && !oldIddantocOfNhanvienListNewNhanvien.equals(dantoc)) {
+                        oldIddantocOfNhanvienListNewNhanvien.getNhanvienList().remove(nhanvienListNewNhanvien);
+                        oldIddantocOfNhanvienListNewNhanvien = em.merge(oldIddantocOfNhanvienListNewNhanvien);
                     }
                 }
             }
@@ -142,12 +141,12 @@ public class DantocJpaController implements Serializable {
                 throw new NonexistentEntityException("The dantoc with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Nhanvien> nhanvienCollectionOrphanCheck = dantoc.getNhanvienCollection();
-            for (Nhanvien nhanvienCollectionOrphanCheckNhanvien : nhanvienCollectionOrphanCheck) {
+            List<Nhanvien> nhanvienListOrphanCheck = dantoc.getNhanvienList();
+            for (Nhanvien nhanvienListOrphanCheckNhanvien : nhanvienListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Dantoc (" + dantoc + ") cannot be destroyed since the Nhanvien " + nhanvienCollectionOrphanCheckNhanvien + " in its nhanvienCollection field has a non-nullable iddantoc field.");
+                illegalOrphanMessages.add("This Dantoc (" + dantoc + ") cannot be destroyed since the Nhanvien " + nhanvienListOrphanCheckNhanvien + " in its nhanvienList field has a non-nullable iddantoc field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

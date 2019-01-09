@@ -16,7 +16,6 @@ import javax.persistence.criteria.Root;
 import ims.dto.Nhanvien;
 import ims.dto.Tongiao;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class TongiaoJpaController implements Serializable {
     }
 
     public void create(Tongiao tongiao) throws PreexistingEntityException, Exception {
-        if (tongiao.getNhanvienCollection() == null) {
-            tongiao.setNhanvienCollection(new ArrayList<Nhanvien>());
+        if (tongiao.getNhanvienList() == null) {
+            tongiao.setNhanvienList(new ArrayList<Nhanvien>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Nhanvien> attachedNhanvienCollection = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNhanvienToAttach : tongiao.getNhanvienCollection()) {
-                nhanvienCollectionNhanvienToAttach = em.getReference(nhanvienCollectionNhanvienToAttach.getClass(), nhanvienCollectionNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollection.add(nhanvienCollectionNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienList = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNhanvienToAttach : tongiao.getNhanvienList()) {
+                nhanvienListNhanvienToAttach = em.getReference(nhanvienListNhanvienToAttach.getClass(), nhanvienListNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienList.add(nhanvienListNhanvienToAttach);
             }
-            tongiao.setNhanvienCollection(attachedNhanvienCollection);
+            tongiao.setNhanvienList(attachedNhanvienList);
             em.persist(tongiao);
-            for (Nhanvien nhanvienCollectionNhanvien : tongiao.getNhanvienCollection()) {
-                Tongiao oldIdtongiaoOfNhanvienCollectionNhanvien = nhanvienCollectionNhanvien.getIdtongiao();
-                nhanvienCollectionNhanvien.setIdtongiao(tongiao);
-                nhanvienCollectionNhanvien = em.merge(nhanvienCollectionNhanvien);
-                if (oldIdtongiaoOfNhanvienCollectionNhanvien != null) {
-                    oldIdtongiaoOfNhanvienCollectionNhanvien.getNhanvienCollection().remove(nhanvienCollectionNhanvien);
-                    oldIdtongiaoOfNhanvienCollectionNhanvien = em.merge(oldIdtongiaoOfNhanvienCollectionNhanvien);
+            for (Nhanvien nhanvienListNhanvien : tongiao.getNhanvienList()) {
+                Tongiao oldIdtongiaoOfNhanvienListNhanvien = nhanvienListNhanvien.getIdtongiao();
+                nhanvienListNhanvien.setIdtongiao(tongiao);
+                nhanvienListNhanvien = em.merge(nhanvienListNhanvien);
+                if (oldIdtongiaoOfNhanvienListNhanvien != null) {
+                    oldIdtongiaoOfNhanvienListNhanvien.getNhanvienList().remove(nhanvienListNhanvien);
+                    oldIdtongiaoOfNhanvienListNhanvien = em.merge(oldIdtongiaoOfNhanvienListNhanvien);
                 }
             }
             em.getTransaction().commit();
@@ -79,36 +78,36 @@ public class TongiaoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Tongiao persistentTongiao = em.find(Tongiao.class, tongiao.getIdtongiao());
-            Collection<Nhanvien> nhanvienCollectionOld = persistentTongiao.getNhanvienCollection();
-            Collection<Nhanvien> nhanvienCollectionNew = tongiao.getNhanvienCollection();
+            List<Nhanvien> nhanvienListOld = persistentTongiao.getNhanvienList();
+            List<Nhanvien> nhanvienListNew = tongiao.getNhanvienList();
             List<String> illegalOrphanMessages = null;
-            for (Nhanvien nhanvienCollectionOldNhanvien : nhanvienCollectionOld) {
-                if (!nhanvienCollectionNew.contains(nhanvienCollectionOldNhanvien)) {
+            for (Nhanvien nhanvienListOldNhanvien : nhanvienListOld) {
+                if (!nhanvienListNew.contains(nhanvienListOldNhanvien)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienCollectionOldNhanvien + " since its idtongiao field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienListOldNhanvien + " since its idtongiao field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Nhanvien> attachedNhanvienCollectionNew = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNewNhanvienToAttach : nhanvienCollectionNew) {
-                nhanvienCollectionNewNhanvienToAttach = em.getReference(nhanvienCollectionNewNhanvienToAttach.getClass(), nhanvienCollectionNewNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollectionNew.add(nhanvienCollectionNewNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienListNew = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNewNhanvienToAttach : nhanvienListNew) {
+                nhanvienListNewNhanvienToAttach = em.getReference(nhanvienListNewNhanvienToAttach.getClass(), nhanvienListNewNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienListNew.add(nhanvienListNewNhanvienToAttach);
             }
-            nhanvienCollectionNew = attachedNhanvienCollectionNew;
-            tongiao.setNhanvienCollection(nhanvienCollectionNew);
+            nhanvienListNew = attachedNhanvienListNew;
+            tongiao.setNhanvienList(nhanvienListNew);
             tongiao = em.merge(tongiao);
-            for (Nhanvien nhanvienCollectionNewNhanvien : nhanvienCollectionNew) {
-                if (!nhanvienCollectionOld.contains(nhanvienCollectionNewNhanvien)) {
-                    Tongiao oldIdtongiaoOfNhanvienCollectionNewNhanvien = nhanvienCollectionNewNhanvien.getIdtongiao();
-                    nhanvienCollectionNewNhanvien.setIdtongiao(tongiao);
-                    nhanvienCollectionNewNhanvien = em.merge(nhanvienCollectionNewNhanvien);
-                    if (oldIdtongiaoOfNhanvienCollectionNewNhanvien != null && !oldIdtongiaoOfNhanvienCollectionNewNhanvien.equals(tongiao)) {
-                        oldIdtongiaoOfNhanvienCollectionNewNhanvien.getNhanvienCollection().remove(nhanvienCollectionNewNhanvien);
-                        oldIdtongiaoOfNhanvienCollectionNewNhanvien = em.merge(oldIdtongiaoOfNhanvienCollectionNewNhanvien);
+            for (Nhanvien nhanvienListNewNhanvien : nhanvienListNew) {
+                if (!nhanvienListOld.contains(nhanvienListNewNhanvien)) {
+                    Tongiao oldIdtongiaoOfNhanvienListNewNhanvien = nhanvienListNewNhanvien.getIdtongiao();
+                    nhanvienListNewNhanvien.setIdtongiao(tongiao);
+                    nhanvienListNewNhanvien = em.merge(nhanvienListNewNhanvien);
+                    if (oldIdtongiaoOfNhanvienListNewNhanvien != null && !oldIdtongiaoOfNhanvienListNewNhanvien.equals(tongiao)) {
+                        oldIdtongiaoOfNhanvienListNewNhanvien.getNhanvienList().remove(nhanvienListNewNhanvien);
+                        oldIdtongiaoOfNhanvienListNewNhanvien = em.merge(oldIdtongiaoOfNhanvienListNewNhanvien);
                     }
                 }
             }
@@ -142,12 +141,12 @@ public class TongiaoJpaController implements Serializable {
                 throw new NonexistentEntityException("The tongiao with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Nhanvien> nhanvienCollectionOrphanCheck = tongiao.getNhanvienCollection();
-            for (Nhanvien nhanvienCollectionOrphanCheckNhanvien : nhanvienCollectionOrphanCheck) {
+            List<Nhanvien> nhanvienListOrphanCheck = tongiao.getNhanvienList();
+            for (Nhanvien nhanvienListOrphanCheckNhanvien : nhanvienListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Tongiao (" + tongiao + ") cannot be destroyed since the Nhanvien " + nhanvienCollectionOrphanCheckNhanvien + " in its nhanvienCollection field has a non-nullable idtongiao field.");
+                illegalOrphanMessages.add("This Tongiao (" + tongiao + ") cannot be destroyed since the Nhanvien " + nhanvienListOrphanCheckNhanvien + " in its nhanvienList field has a non-nullable idtongiao field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

@@ -16,7 +16,6 @@ import javax.persistence.criteria.Root;
 import ims.dto.Nhanvien;
 import ims.dto.Phongban;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class PhongbanJpaController implements Serializable {
     }
 
     public void create(Phongban phongban) throws PreexistingEntityException, Exception {
-        if (phongban.getNhanvienCollection() == null) {
-            phongban.setNhanvienCollection(new ArrayList<Nhanvien>());
+        if (phongban.getNhanvienList() == null) {
+            phongban.setNhanvienList(new ArrayList<Nhanvien>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Nhanvien> attachedNhanvienCollection = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNhanvienToAttach : phongban.getNhanvienCollection()) {
-                nhanvienCollectionNhanvienToAttach = em.getReference(nhanvienCollectionNhanvienToAttach.getClass(), nhanvienCollectionNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollection.add(nhanvienCollectionNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienList = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNhanvienToAttach : phongban.getNhanvienList()) {
+                nhanvienListNhanvienToAttach = em.getReference(nhanvienListNhanvienToAttach.getClass(), nhanvienListNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienList.add(nhanvienListNhanvienToAttach);
             }
-            phongban.setNhanvienCollection(attachedNhanvienCollection);
+            phongban.setNhanvienList(attachedNhanvienList);
             em.persist(phongban);
-            for (Nhanvien nhanvienCollectionNhanvien : phongban.getNhanvienCollection()) {
-                Phongban oldIdphongbanOfNhanvienCollectionNhanvien = nhanvienCollectionNhanvien.getIdphongban();
-                nhanvienCollectionNhanvien.setIdphongban(phongban);
-                nhanvienCollectionNhanvien = em.merge(nhanvienCollectionNhanvien);
-                if (oldIdphongbanOfNhanvienCollectionNhanvien != null) {
-                    oldIdphongbanOfNhanvienCollectionNhanvien.getNhanvienCollection().remove(nhanvienCollectionNhanvien);
-                    oldIdphongbanOfNhanvienCollectionNhanvien = em.merge(oldIdphongbanOfNhanvienCollectionNhanvien);
+            for (Nhanvien nhanvienListNhanvien : phongban.getNhanvienList()) {
+                Phongban oldIdphongbanOfNhanvienListNhanvien = nhanvienListNhanvien.getIdphongban();
+                nhanvienListNhanvien.setIdphongban(phongban);
+                nhanvienListNhanvien = em.merge(nhanvienListNhanvien);
+                if (oldIdphongbanOfNhanvienListNhanvien != null) {
+                    oldIdphongbanOfNhanvienListNhanvien.getNhanvienList().remove(nhanvienListNhanvien);
+                    oldIdphongbanOfNhanvienListNhanvien = em.merge(oldIdphongbanOfNhanvienListNhanvien);
                 }
             }
             em.getTransaction().commit();
@@ -79,36 +78,36 @@ public class PhongbanJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Phongban persistentPhongban = em.find(Phongban.class, phongban.getIdphongban());
-            Collection<Nhanvien> nhanvienCollectionOld = persistentPhongban.getNhanvienCollection();
-            Collection<Nhanvien> nhanvienCollectionNew = phongban.getNhanvienCollection();
+            List<Nhanvien> nhanvienListOld = persistentPhongban.getNhanvienList();
+            List<Nhanvien> nhanvienListNew = phongban.getNhanvienList();
             List<String> illegalOrphanMessages = null;
-            for (Nhanvien nhanvienCollectionOldNhanvien : nhanvienCollectionOld) {
-                if (!nhanvienCollectionNew.contains(nhanvienCollectionOldNhanvien)) {
+            for (Nhanvien nhanvienListOldNhanvien : nhanvienListOld) {
+                if (!nhanvienListNew.contains(nhanvienListOldNhanvien)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienCollectionOldNhanvien + " since its idphongban field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienListOldNhanvien + " since its idphongban field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Nhanvien> attachedNhanvienCollectionNew = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNewNhanvienToAttach : nhanvienCollectionNew) {
-                nhanvienCollectionNewNhanvienToAttach = em.getReference(nhanvienCollectionNewNhanvienToAttach.getClass(), nhanvienCollectionNewNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollectionNew.add(nhanvienCollectionNewNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienListNew = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNewNhanvienToAttach : nhanvienListNew) {
+                nhanvienListNewNhanvienToAttach = em.getReference(nhanvienListNewNhanvienToAttach.getClass(), nhanvienListNewNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienListNew.add(nhanvienListNewNhanvienToAttach);
             }
-            nhanvienCollectionNew = attachedNhanvienCollectionNew;
-            phongban.setNhanvienCollection(nhanvienCollectionNew);
+            nhanvienListNew = attachedNhanvienListNew;
+            phongban.setNhanvienList(nhanvienListNew);
             phongban = em.merge(phongban);
-            for (Nhanvien nhanvienCollectionNewNhanvien : nhanvienCollectionNew) {
-                if (!nhanvienCollectionOld.contains(nhanvienCollectionNewNhanvien)) {
-                    Phongban oldIdphongbanOfNhanvienCollectionNewNhanvien = nhanvienCollectionNewNhanvien.getIdphongban();
-                    nhanvienCollectionNewNhanvien.setIdphongban(phongban);
-                    nhanvienCollectionNewNhanvien = em.merge(nhanvienCollectionNewNhanvien);
-                    if (oldIdphongbanOfNhanvienCollectionNewNhanvien != null && !oldIdphongbanOfNhanvienCollectionNewNhanvien.equals(phongban)) {
-                        oldIdphongbanOfNhanvienCollectionNewNhanvien.getNhanvienCollection().remove(nhanvienCollectionNewNhanvien);
-                        oldIdphongbanOfNhanvienCollectionNewNhanvien = em.merge(oldIdphongbanOfNhanvienCollectionNewNhanvien);
+            for (Nhanvien nhanvienListNewNhanvien : nhanvienListNew) {
+                if (!nhanvienListOld.contains(nhanvienListNewNhanvien)) {
+                    Phongban oldIdphongbanOfNhanvienListNewNhanvien = nhanvienListNewNhanvien.getIdphongban();
+                    nhanvienListNewNhanvien.setIdphongban(phongban);
+                    nhanvienListNewNhanvien = em.merge(nhanvienListNewNhanvien);
+                    if (oldIdphongbanOfNhanvienListNewNhanvien != null && !oldIdphongbanOfNhanvienListNewNhanvien.equals(phongban)) {
+                        oldIdphongbanOfNhanvienListNewNhanvien.getNhanvienList().remove(nhanvienListNewNhanvien);
+                        oldIdphongbanOfNhanvienListNewNhanvien = em.merge(oldIdphongbanOfNhanvienListNewNhanvien);
                     }
                 }
             }
@@ -142,12 +141,12 @@ public class PhongbanJpaController implements Serializable {
                 throw new NonexistentEntityException("The phongban with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Nhanvien> nhanvienCollectionOrphanCheck = phongban.getNhanvienCollection();
-            for (Nhanvien nhanvienCollectionOrphanCheckNhanvien : nhanvienCollectionOrphanCheck) {
+            List<Nhanvien> nhanvienListOrphanCheck = phongban.getNhanvienList();
+            for (Nhanvien nhanvienListOrphanCheckNhanvien : nhanvienListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Phongban (" + phongban + ") cannot be destroyed since the Nhanvien " + nhanvienCollectionOrphanCheckNhanvien + " in its nhanvienCollection field has a non-nullable idphongban field.");
+                illegalOrphanMessages.add("This Phongban (" + phongban + ") cannot be destroyed since the Nhanvien " + nhanvienListOrphanCheckNhanvien + " in its nhanvienList field has a non-nullable idphongban field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

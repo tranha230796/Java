@@ -54,7 +54,7 @@ Contributor(s):
     <mapping class="ims.dto.Phongban"/>
     <mapping class="ims.dto.Quoctich"/>
     <mapping class="ims.dto.Tinhtrangsuckhoe"/>
-    <mapping class="ims.dto.To"/>
+    <mapping class="ims.dto.Tophong"/>
     <mapping class="ims.dto.Tongiao"/>
     <mapping class="ims.dto.Xahoi"/>
   </session-factory>

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -20,6 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tinhtrangsuckhoe")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tinhtrangsuckhoe.findAll", query = "SELECT t FROM Tinhtrangsuckhoe t")})
 public class Tinhtrangsuckhoe implements Serializable {

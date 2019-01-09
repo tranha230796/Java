@@ -16,7 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import ims.dto.Nhanvien;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class GiadinhJpaController implements Serializable {
     }
 
     public void create(Giadinh giadinh) throws PreexistingEntityException, Exception {
-        if (giadinh.getNhanvienCollection() == null) {
-            giadinh.setNhanvienCollection(new ArrayList<Nhanvien>());
+        if (giadinh.getNhanvienList() == null) {
+            giadinh.setNhanvienList(new ArrayList<Nhanvien>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Nhanvien> attachedNhanvienCollection = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNhanvienToAttach : giadinh.getNhanvienCollection()) {
-                nhanvienCollectionNhanvienToAttach = em.getReference(nhanvienCollectionNhanvienToAttach.getClass(), nhanvienCollectionNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollection.add(nhanvienCollectionNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienList = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNhanvienToAttach : giadinh.getNhanvienList()) {
+                nhanvienListNhanvienToAttach = em.getReference(nhanvienListNhanvienToAttach.getClass(), nhanvienListNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienList.add(nhanvienListNhanvienToAttach);
             }
-            giadinh.setNhanvienCollection(attachedNhanvienCollection);
+            giadinh.setNhanvienList(attachedNhanvienList);
             em.persist(giadinh);
-            for (Nhanvien nhanvienCollectionNhanvien : giadinh.getNhanvienCollection()) {
-                Giadinh oldIdgiadinhOfNhanvienCollectionNhanvien = nhanvienCollectionNhanvien.getIdgiadinh();
-                nhanvienCollectionNhanvien.setIdgiadinh(giadinh);
-                nhanvienCollectionNhanvien = em.merge(nhanvienCollectionNhanvien);
-                if (oldIdgiadinhOfNhanvienCollectionNhanvien != null) {
-                    oldIdgiadinhOfNhanvienCollectionNhanvien.getNhanvienCollection().remove(nhanvienCollectionNhanvien);
-                    oldIdgiadinhOfNhanvienCollectionNhanvien = em.merge(oldIdgiadinhOfNhanvienCollectionNhanvien);
+            for (Nhanvien nhanvienListNhanvien : giadinh.getNhanvienList()) {
+                Giadinh oldIdgiadinhOfNhanvienListNhanvien = nhanvienListNhanvien.getIdgiadinh();
+                nhanvienListNhanvien.setIdgiadinh(giadinh);
+                nhanvienListNhanvien = em.merge(nhanvienListNhanvien);
+                if (oldIdgiadinhOfNhanvienListNhanvien != null) {
+                    oldIdgiadinhOfNhanvienListNhanvien.getNhanvienList().remove(nhanvienListNhanvien);
+                    oldIdgiadinhOfNhanvienListNhanvien = em.merge(oldIdgiadinhOfNhanvienListNhanvien);
                 }
             }
             em.getTransaction().commit();
@@ -79,36 +78,36 @@ public class GiadinhJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Giadinh persistentGiadinh = em.find(Giadinh.class, giadinh.getIdgiadinh());
-            Collection<Nhanvien> nhanvienCollectionOld = persistentGiadinh.getNhanvienCollection();
-            Collection<Nhanvien> nhanvienCollectionNew = giadinh.getNhanvienCollection();
+            List<Nhanvien> nhanvienListOld = persistentGiadinh.getNhanvienList();
+            List<Nhanvien> nhanvienListNew = giadinh.getNhanvienList();
             List<String> illegalOrphanMessages = null;
-            for (Nhanvien nhanvienCollectionOldNhanvien : nhanvienCollectionOld) {
-                if (!nhanvienCollectionNew.contains(nhanvienCollectionOldNhanvien)) {
+            for (Nhanvien nhanvienListOldNhanvien : nhanvienListOld) {
+                if (!nhanvienListNew.contains(nhanvienListOldNhanvien)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienCollectionOldNhanvien + " since its idgiadinh field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienListOldNhanvien + " since its idgiadinh field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Nhanvien> attachedNhanvienCollectionNew = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNewNhanvienToAttach : nhanvienCollectionNew) {
-                nhanvienCollectionNewNhanvienToAttach = em.getReference(nhanvienCollectionNewNhanvienToAttach.getClass(), nhanvienCollectionNewNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollectionNew.add(nhanvienCollectionNewNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienListNew = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNewNhanvienToAttach : nhanvienListNew) {
+                nhanvienListNewNhanvienToAttach = em.getReference(nhanvienListNewNhanvienToAttach.getClass(), nhanvienListNewNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienListNew.add(nhanvienListNewNhanvienToAttach);
             }
-            nhanvienCollectionNew = attachedNhanvienCollectionNew;
-            giadinh.setNhanvienCollection(nhanvienCollectionNew);
+            nhanvienListNew = attachedNhanvienListNew;
+            giadinh.setNhanvienList(nhanvienListNew);
             giadinh = em.merge(giadinh);
-            for (Nhanvien nhanvienCollectionNewNhanvien : nhanvienCollectionNew) {
-                if (!nhanvienCollectionOld.contains(nhanvienCollectionNewNhanvien)) {
-                    Giadinh oldIdgiadinhOfNhanvienCollectionNewNhanvien = nhanvienCollectionNewNhanvien.getIdgiadinh();
-                    nhanvienCollectionNewNhanvien.setIdgiadinh(giadinh);
-                    nhanvienCollectionNewNhanvien = em.merge(nhanvienCollectionNewNhanvien);
-                    if (oldIdgiadinhOfNhanvienCollectionNewNhanvien != null && !oldIdgiadinhOfNhanvienCollectionNewNhanvien.equals(giadinh)) {
-                        oldIdgiadinhOfNhanvienCollectionNewNhanvien.getNhanvienCollection().remove(nhanvienCollectionNewNhanvien);
-                        oldIdgiadinhOfNhanvienCollectionNewNhanvien = em.merge(oldIdgiadinhOfNhanvienCollectionNewNhanvien);
+            for (Nhanvien nhanvienListNewNhanvien : nhanvienListNew) {
+                if (!nhanvienListOld.contains(nhanvienListNewNhanvien)) {
+                    Giadinh oldIdgiadinhOfNhanvienListNewNhanvien = nhanvienListNewNhanvien.getIdgiadinh();
+                    nhanvienListNewNhanvien.setIdgiadinh(giadinh);
+                    nhanvienListNewNhanvien = em.merge(nhanvienListNewNhanvien);
+                    if (oldIdgiadinhOfNhanvienListNewNhanvien != null && !oldIdgiadinhOfNhanvienListNewNhanvien.equals(giadinh)) {
+                        oldIdgiadinhOfNhanvienListNewNhanvien.getNhanvienList().remove(nhanvienListNewNhanvien);
+                        oldIdgiadinhOfNhanvienListNewNhanvien = em.merge(oldIdgiadinhOfNhanvienListNewNhanvien);
                     }
                 }
             }
@@ -142,12 +141,12 @@ public class GiadinhJpaController implements Serializable {
                 throw new NonexistentEntityException("The giadinh with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Nhanvien> nhanvienCollectionOrphanCheck = giadinh.getNhanvienCollection();
-            for (Nhanvien nhanvienCollectionOrphanCheckNhanvien : nhanvienCollectionOrphanCheck) {
+            List<Nhanvien> nhanvienListOrphanCheck = giadinh.getNhanvienList();
+            for (Nhanvien nhanvienListOrphanCheckNhanvien : nhanvienListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Giadinh (" + giadinh + ") cannot be destroyed since the Nhanvien " + nhanvienCollectionOrphanCheckNhanvien + " in its nhanvienCollection field has a non-nullable idgiadinh field.");
+                illegalOrphanMessages.add("This Giadinh (" + giadinh + ") cannot be destroyed since the Nhanvien " + nhanvienListOrphanCheckNhanvien + " in its nhanvienList field has a non-nullable idgiadinh field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

@@ -20,7 +20,7 @@ import ims.dto.Phongban;
 import ims.dto.Tongiao;
 import ims.dto.Noisinhsong;
 import ims.dto.Xahoi;
-import ims.dto.To;
+import ims.dto.Tophong;
 import ims.dto.Doi;
 import ims.dto.Nhanvien;
 import java.util.ArrayList;
@@ -83,10 +83,10 @@ public class NhanvienJpaController implements Serializable {
                 idxahoi = em.getReference(idxahoi.getClass(), idxahoi.getIdxahoi());
                 nhanvien.setIdxahoi(idxahoi);
             }
-            To to = nhanvien.getTo();
-            if (to != null) {
-                to = em.getReference(to.getClass(), to.getMato());
-                nhanvien.setTo(to);
+            Tophong tophong = nhanvien.getTophong();
+            if (tophong != null) {
+                tophong = em.getReference(tophong.getClass(), tophong.getMato());
+                nhanvien.setTophong(tophong);
             }
             Doi doi = nhanvien.getDoi();
             if (doi != null) {
@@ -95,41 +95,41 @@ public class NhanvienJpaController implements Serializable {
             }
             em.persist(nhanvien);
             if (idquoctich != null) {
-                idquoctich.getNhanvienCollection().add(nhanvien);
+                idquoctich.getNhanvienList().add(nhanvien);
                 idquoctich = em.merge(idquoctich);
             }
             if (idgiadinh != null) {
-                idgiadinh.getNhanvienCollection().add(nhanvien);
+                idgiadinh.getNhanvienList().add(nhanvien);
                 idgiadinh = em.merge(idgiadinh);
             }
             if (iddantoc != null) {
-                iddantoc.getNhanvienCollection().add(nhanvien);
+                iddantoc.getNhanvienList().add(nhanvien);
                 iddantoc = em.merge(iddantoc);
             }
             if (idphongban != null) {
-                idphongban.getNhanvienCollection().add(nhanvien);
+                idphongban.getNhanvienList().add(nhanvien);
                 idphongban = em.merge(idphongban);
             }
             if (idtongiao != null) {
-                idtongiao.getNhanvienCollection().add(nhanvien);
+                idtongiao.getNhanvienList().add(nhanvien);
                 idtongiao = em.merge(idtongiao);
             }
             if (idnoisinhsong != null) {
-                idnoisinhsong.getNhanvienCollection().add(nhanvien);
+                idnoisinhsong.getNhanvienList().add(nhanvien);
                 idnoisinhsong = em.merge(idnoisinhsong);
             }
             if (idxahoi != null) {
-                idxahoi.getNhanvienCollection().add(nhanvien);
+                idxahoi.getNhanvienList().add(nhanvien);
                 idxahoi = em.merge(idxahoi);
             }
-            if (to != null) {
-                Nhanvien oldNhanvienOfTo = to.getNhanvien();
-                if (oldNhanvienOfTo != null) {
-                    oldNhanvienOfTo.setTo(null);
-                    oldNhanvienOfTo = em.merge(oldNhanvienOfTo);
+            if (tophong != null) {
+                Nhanvien oldNhanvienOfTophong = tophong.getNhanvien();
+                if (oldNhanvienOfTophong != null) {
+                    oldNhanvienOfTophong.setTophong(null);
+                    oldNhanvienOfTophong = em.merge(oldNhanvienOfTophong);
                 }
-                to.setNhanvien(nhanvien);
-                to = em.merge(to);
+                tophong.setNhanvien(nhanvien);
+                tophong = em.merge(tophong);
             }
             if (doi != null) {
                 Nhanvien oldNhanvienOfDoi = doi.getNhanvien();
@@ -173,16 +173,16 @@ public class NhanvienJpaController implements Serializable {
             Noisinhsong idnoisinhsongNew = nhanvien.getIdnoisinhsong();
             Xahoi idxahoiOld = persistentNhanvien.getIdxahoi();
             Xahoi idxahoiNew = nhanvien.getIdxahoi();
-            To toOld = persistentNhanvien.getTo();
-            To toNew = nhanvien.getTo();
+            Tophong tophongOld = persistentNhanvien.getTophong();
+            Tophong tophongNew = nhanvien.getTophong();
             Doi doiOld = persistentNhanvien.getDoi();
             Doi doiNew = nhanvien.getDoi();
             List<String> illegalOrphanMessages = null;
-            if (toOld != null && !toOld.equals(toNew)) {
+            if (tophongOld != null && !tophongOld.equals(tophongNew)) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("You must retain To " + toOld + " since its nhanvien field is not nullable.");
+                illegalOrphanMessages.add("You must retain Tophong " + tophongOld + " since its nhanvien field is not nullable.");
             }
             if (doiOld != null && !doiOld.equals(doiNew)) {
                 if (illegalOrphanMessages == null) {
@@ -221,9 +221,9 @@ public class NhanvienJpaController implements Serializable {
                 idxahoiNew = em.getReference(idxahoiNew.getClass(), idxahoiNew.getIdxahoi());
                 nhanvien.setIdxahoi(idxahoiNew);
             }
-            if (toNew != null) {
-                toNew = em.getReference(toNew.getClass(), toNew.getMato());
-                nhanvien.setTo(toNew);
+            if (tophongNew != null) {
+                tophongNew = em.getReference(tophongNew.getClass(), tophongNew.getMato());
+                nhanvien.setTophong(tophongNew);
             }
             if (doiNew != null) {
                 doiNew = em.getReference(doiNew.getClass(), doiNew.getMadoi());
@@ -231,69 +231,69 @@ public class NhanvienJpaController implements Serializable {
             }
             nhanvien = em.merge(nhanvien);
             if (idquoctichOld != null && !idquoctichOld.equals(idquoctichNew)) {
-                idquoctichOld.getNhanvienCollection().remove(nhanvien);
+                idquoctichOld.getNhanvienList().remove(nhanvien);
                 idquoctichOld = em.merge(idquoctichOld);
             }
             if (idquoctichNew != null && !idquoctichNew.equals(idquoctichOld)) {
-                idquoctichNew.getNhanvienCollection().add(nhanvien);
+                idquoctichNew.getNhanvienList().add(nhanvien);
                 idquoctichNew = em.merge(idquoctichNew);
             }
             if (idgiadinhOld != null && !idgiadinhOld.equals(idgiadinhNew)) {
-                idgiadinhOld.getNhanvienCollection().remove(nhanvien);
+                idgiadinhOld.getNhanvienList().remove(nhanvien);
                 idgiadinhOld = em.merge(idgiadinhOld);
             }
             if (idgiadinhNew != null && !idgiadinhNew.equals(idgiadinhOld)) {
-                idgiadinhNew.getNhanvienCollection().add(nhanvien);
+                idgiadinhNew.getNhanvienList().add(nhanvien);
                 idgiadinhNew = em.merge(idgiadinhNew);
             }
             if (iddantocOld != null && !iddantocOld.equals(iddantocNew)) {
-                iddantocOld.getNhanvienCollection().remove(nhanvien);
+                iddantocOld.getNhanvienList().remove(nhanvien);
                 iddantocOld = em.merge(iddantocOld);
             }
             if (iddantocNew != null && !iddantocNew.equals(iddantocOld)) {
-                iddantocNew.getNhanvienCollection().add(nhanvien);
+                iddantocNew.getNhanvienList().add(nhanvien);
                 iddantocNew = em.merge(iddantocNew);
             }
             if (idphongbanOld != null && !idphongbanOld.equals(idphongbanNew)) {
-                idphongbanOld.getNhanvienCollection().remove(nhanvien);
+                idphongbanOld.getNhanvienList().remove(nhanvien);
                 idphongbanOld = em.merge(idphongbanOld);
             }
             if (idphongbanNew != null && !idphongbanNew.equals(idphongbanOld)) {
-                idphongbanNew.getNhanvienCollection().add(nhanvien);
+                idphongbanNew.getNhanvienList().add(nhanvien);
                 idphongbanNew = em.merge(idphongbanNew);
             }
             if (idtongiaoOld != null && !idtongiaoOld.equals(idtongiaoNew)) {
-                idtongiaoOld.getNhanvienCollection().remove(nhanvien);
+                idtongiaoOld.getNhanvienList().remove(nhanvien);
                 idtongiaoOld = em.merge(idtongiaoOld);
             }
             if (idtongiaoNew != null && !idtongiaoNew.equals(idtongiaoOld)) {
-                idtongiaoNew.getNhanvienCollection().add(nhanvien);
+                idtongiaoNew.getNhanvienList().add(nhanvien);
                 idtongiaoNew = em.merge(idtongiaoNew);
             }
             if (idnoisinhsongOld != null && !idnoisinhsongOld.equals(idnoisinhsongNew)) {
-                idnoisinhsongOld.getNhanvienCollection().remove(nhanvien);
+                idnoisinhsongOld.getNhanvienList().remove(nhanvien);
                 idnoisinhsongOld = em.merge(idnoisinhsongOld);
             }
             if (idnoisinhsongNew != null && !idnoisinhsongNew.equals(idnoisinhsongOld)) {
-                idnoisinhsongNew.getNhanvienCollection().add(nhanvien);
+                idnoisinhsongNew.getNhanvienList().add(nhanvien);
                 idnoisinhsongNew = em.merge(idnoisinhsongNew);
             }
             if (idxahoiOld != null && !idxahoiOld.equals(idxahoiNew)) {
-                idxahoiOld.getNhanvienCollection().remove(nhanvien);
+                idxahoiOld.getNhanvienList().remove(nhanvien);
                 idxahoiOld = em.merge(idxahoiOld);
             }
             if (idxahoiNew != null && !idxahoiNew.equals(idxahoiOld)) {
-                idxahoiNew.getNhanvienCollection().add(nhanvien);
+                idxahoiNew.getNhanvienList().add(nhanvien);
                 idxahoiNew = em.merge(idxahoiNew);
             }
-            if (toNew != null && !toNew.equals(toOld)) {
-                Nhanvien oldNhanvienOfTo = toNew.getNhanvien();
-                if (oldNhanvienOfTo != null) {
-                    oldNhanvienOfTo.setTo(null);
-                    oldNhanvienOfTo = em.merge(oldNhanvienOfTo);
+            if (tophongNew != null && !tophongNew.equals(tophongOld)) {
+                Nhanvien oldNhanvienOfTophong = tophongNew.getNhanvien();
+                if (oldNhanvienOfTophong != null) {
+                    oldNhanvienOfTophong.setTophong(null);
+                    oldNhanvienOfTophong = em.merge(oldNhanvienOfTophong);
                 }
-                toNew.setNhanvien(nhanvien);
-                toNew = em.merge(toNew);
+                tophongNew.setNhanvien(nhanvien);
+                tophongNew = em.merge(tophongNew);
             }
             if (doiNew != null && !doiNew.equals(doiOld)) {
                 Nhanvien oldNhanvienOfDoi = doiNew.getNhanvien();
@@ -334,12 +334,12 @@ public class NhanvienJpaController implements Serializable {
                 throw new NonexistentEntityException("The nhanvien with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            To toOrphanCheck = nhanvien.getTo();
-            if (toOrphanCheck != null) {
+            Tophong tophongOrphanCheck = nhanvien.getTophong();
+            if (tophongOrphanCheck != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Nhanvien (" + nhanvien + ") cannot be destroyed since the To " + toOrphanCheck + " in its to field has a non-nullable nhanvien field.");
+                illegalOrphanMessages.add("This Nhanvien (" + nhanvien + ") cannot be destroyed since the Tophong " + tophongOrphanCheck + " in its tophong field has a non-nullable nhanvien field.");
             }
             Doi doiOrphanCheck = nhanvien.getDoi();
             if (doiOrphanCheck != null) {
@@ -353,37 +353,37 @@ public class NhanvienJpaController implements Serializable {
             }
             Quoctich idquoctich = nhanvien.getIdquoctich();
             if (idquoctich != null) {
-                idquoctich.getNhanvienCollection().remove(nhanvien);
+                idquoctich.getNhanvienList().remove(nhanvien);
                 idquoctich = em.merge(idquoctich);
             }
             Giadinh idgiadinh = nhanvien.getIdgiadinh();
             if (idgiadinh != null) {
-                idgiadinh.getNhanvienCollection().remove(nhanvien);
+                idgiadinh.getNhanvienList().remove(nhanvien);
                 idgiadinh = em.merge(idgiadinh);
             }
             Dantoc iddantoc = nhanvien.getIddantoc();
             if (iddantoc != null) {
-                iddantoc.getNhanvienCollection().remove(nhanvien);
+                iddantoc.getNhanvienList().remove(nhanvien);
                 iddantoc = em.merge(iddantoc);
             }
             Phongban idphongban = nhanvien.getIdphongban();
             if (idphongban != null) {
-                idphongban.getNhanvienCollection().remove(nhanvien);
+                idphongban.getNhanvienList().remove(nhanvien);
                 idphongban = em.merge(idphongban);
             }
             Tongiao idtongiao = nhanvien.getIdtongiao();
             if (idtongiao != null) {
-                idtongiao.getNhanvienCollection().remove(nhanvien);
+                idtongiao.getNhanvienList().remove(nhanvien);
                 idtongiao = em.merge(idtongiao);
             }
             Noisinhsong idnoisinhsong = nhanvien.getIdnoisinhsong();
             if (idnoisinhsong != null) {
-                idnoisinhsong.getNhanvienCollection().remove(nhanvien);
+                idnoisinhsong.getNhanvienList().remove(nhanvien);
                 idnoisinhsong = em.merge(idnoisinhsong);
             }
             Xahoi idxahoi = nhanvien.getIdxahoi();
             if (idxahoi != null) {
-                idxahoi.getNhanvienCollection().remove(nhanvien);
+                idxahoi.getNhanvienList().remove(nhanvien);
                 idxahoi = em.merge(idxahoi);
             }
             em.remove(nhanvien);

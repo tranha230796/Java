@@ -16,7 +16,6 @@ import javax.persistence.criteria.Root;
 import ims.dto.Nhanvien;
 import ims.dto.Xahoi;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class XahoiJpaController implements Serializable {
     }
 
     public void create(Xahoi xahoi) throws PreexistingEntityException, Exception {
-        if (xahoi.getNhanvienCollection() == null) {
-            xahoi.setNhanvienCollection(new ArrayList<Nhanvien>());
+        if (xahoi.getNhanvienList() == null) {
+            xahoi.setNhanvienList(new ArrayList<Nhanvien>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Nhanvien> attachedNhanvienCollection = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNhanvienToAttach : xahoi.getNhanvienCollection()) {
-                nhanvienCollectionNhanvienToAttach = em.getReference(nhanvienCollectionNhanvienToAttach.getClass(), nhanvienCollectionNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollection.add(nhanvienCollectionNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienList = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNhanvienToAttach : xahoi.getNhanvienList()) {
+                nhanvienListNhanvienToAttach = em.getReference(nhanvienListNhanvienToAttach.getClass(), nhanvienListNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienList.add(nhanvienListNhanvienToAttach);
             }
-            xahoi.setNhanvienCollection(attachedNhanvienCollection);
+            xahoi.setNhanvienList(attachedNhanvienList);
             em.persist(xahoi);
-            for (Nhanvien nhanvienCollectionNhanvien : xahoi.getNhanvienCollection()) {
-                Xahoi oldIdxahoiOfNhanvienCollectionNhanvien = nhanvienCollectionNhanvien.getIdxahoi();
-                nhanvienCollectionNhanvien.setIdxahoi(xahoi);
-                nhanvienCollectionNhanvien = em.merge(nhanvienCollectionNhanvien);
-                if (oldIdxahoiOfNhanvienCollectionNhanvien != null) {
-                    oldIdxahoiOfNhanvienCollectionNhanvien.getNhanvienCollection().remove(nhanvienCollectionNhanvien);
-                    oldIdxahoiOfNhanvienCollectionNhanvien = em.merge(oldIdxahoiOfNhanvienCollectionNhanvien);
+            for (Nhanvien nhanvienListNhanvien : xahoi.getNhanvienList()) {
+                Xahoi oldIdxahoiOfNhanvienListNhanvien = nhanvienListNhanvien.getIdxahoi();
+                nhanvienListNhanvien.setIdxahoi(xahoi);
+                nhanvienListNhanvien = em.merge(nhanvienListNhanvien);
+                if (oldIdxahoiOfNhanvienListNhanvien != null) {
+                    oldIdxahoiOfNhanvienListNhanvien.getNhanvienList().remove(nhanvienListNhanvien);
+                    oldIdxahoiOfNhanvienListNhanvien = em.merge(oldIdxahoiOfNhanvienListNhanvien);
                 }
             }
             em.getTransaction().commit();
@@ -79,36 +78,36 @@ public class XahoiJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Xahoi persistentXahoi = em.find(Xahoi.class, xahoi.getIdxahoi());
-            Collection<Nhanvien> nhanvienCollectionOld = persistentXahoi.getNhanvienCollection();
-            Collection<Nhanvien> nhanvienCollectionNew = xahoi.getNhanvienCollection();
+            List<Nhanvien> nhanvienListOld = persistentXahoi.getNhanvienList();
+            List<Nhanvien> nhanvienListNew = xahoi.getNhanvienList();
             List<String> illegalOrphanMessages = null;
-            for (Nhanvien nhanvienCollectionOldNhanvien : nhanvienCollectionOld) {
-                if (!nhanvienCollectionNew.contains(nhanvienCollectionOldNhanvien)) {
+            for (Nhanvien nhanvienListOldNhanvien : nhanvienListOld) {
+                if (!nhanvienListNew.contains(nhanvienListOldNhanvien)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienCollectionOldNhanvien + " since its idxahoi field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienListOldNhanvien + " since its idxahoi field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Nhanvien> attachedNhanvienCollectionNew = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNewNhanvienToAttach : nhanvienCollectionNew) {
-                nhanvienCollectionNewNhanvienToAttach = em.getReference(nhanvienCollectionNewNhanvienToAttach.getClass(), nhanvienCollectionNewNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollectionNew.add(nhanvienCollectionNewNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienListNew = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNewNhanvienToAttach : nhanvienListNew) {
+                nhanvienListNewNhanvienToAttach = em.getReference(nhanvienListNewNhanvienToAttach.getClass(), nhanvienListNewNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienListNew.add(nhanvienListNewNhanvienToAttach);
             }
-            nhanvienCollectionNew = attachedNhanvienCollectionNew;
-            xahoi.setNhanvienCollection(nhanvienCollectionNew);
+            nhanvienListNew = attachedNhanvienListNew;
+            xahoi.setNhanvienList(nhanvienListNew);
             xahoi = em.merge(xahoi);
-            for (Nhanvien nhanvienCollectionNewNhanvien : nhanvienCollectionNew) {
-                if (!nhanvienCollectionOld.contains(nhanvienCollectionNewNhanvien)) {
-                    Xahoi oldIdxahoiOfNhanvienCollectionNewNhanvien = nhanvienCollectionNewNhanvien.getIdxahoi();
-                    nhanvienCollectionNewNhanvien.setIdxahoi(xahoi);
-                    nhanvienCollectionNewNhanvien = em.merge(nhanvienCollectionNewNhanvien);
-                    if (oldIdxahoiOfNhanvienCollectionNewNhanvien != null && !oldIdxahoiOfNhanvienCollectionNewNhanvien.equals(xahoi)) {
-                        oldIdxahoiOfNhanvienCollectionNewNhanvien.getNhanvienCollection().remove(nhanvienCollectionNewNhanvien);
-                        oldIdxahoiOfNhanvienCollectionNewNhanvien = em.merge(oldIdxahoiOfNhanvienCollectionNewNhanvien);
+            for (Nhanvien nhanvienListNewNhanvien : nhanvienListNew) {
+                if (!nhanvienListOld.contains(nhanvienListNewNhanvien)) {
+                    Xahoi oldIdxahoiOfNhanvienListNewNhanvien = nhanvienListNewNhanvien.getIdxahoi();
+                    nhanvienListNewNhanvien.setIdxahoi(xahoi);
+                    nhanvienListNewNhanvien = em.merge(nhanvienListNewNhanvien);
+                    if (oldIdxahoiOfNhanvienListNewNhanvien != null && !oldIdxahoiOfNhanvienListNewNhanvien.equals(xahoi)) {
+                        oldIdxahoiOfNhanvienListNewNhanvien.getNhanvienList().remove(nhanvienListNewNhanvien);
+                        oldIdxahoiOfNhanvienListNewNhanvien = em.merge(oldIdxahoiOfNhanvienListNewNhanvien);
                     }
                 }
             }
@@ -142,12 +141,12 @@ public class XahoiJpaController implements Serializable {
                 throw new NonexistentEntityException("The xahoi with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Nhanvien> nhanvienCollectionOrphanCheck = xahoi.getNhanvienCollection();
-            for (Nhanvien nhanvienCollectionOrphanCheckNhanvien : nhanvienCollectionOrphanCheck) {
+            List<Nhanvien> nhanvienListOrphanCheck = xahoi.getNhanvienList();
+            for (Nhanvien nhanvienListOrphanCheckNhanvien : nhanvienListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Xahoi (" + xahoi + ") cannot be destroyed since the Nhanvien " + nhanvienCollectionOrphanCheckNhanvien + " in its nhanvienCollection field has a non-nullable idxahoi field.");
+                illegalOrphanMessages.add("This Xahoi (" + xahoi + ") cannot be destroyed since the Nhanvien " + nhanvienListOrphanCheckNhanvien + " in its nhanvienList field has a non-nullable idxahoi field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

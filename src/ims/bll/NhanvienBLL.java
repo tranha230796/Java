@@ -6,8 +6,10 @@
 package ims.bll;
 
 import ims.dal.NhanvienDAL;
+import ims.dao.NhanvienJpaController;
 import ims.dto.Nhanvien;
 import java.util.List;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -30,4 +32,8 @@ public class NhanvienBLL {
 	public void delete(Nhanvien nv) throws Exception {
 		dal.delete(nv);
 	}
+
+    public List<Nhanvien> findNhanvienEntities() {
+        return new NhanvienJpaController(Persistence.createEntityManagerFactory("InventoryManagementPU")).findNhanvienEntities();
+    }
 }

@@ -6,7 +6,9 @@
 package ims.gui;
 
 import ims.bll.DantocBLL;
+import ims.bll.DoiBLL;
 import ims.bll.NhanvienBLL;
+import ims.bll.QuoctichBLL;
 import ims.dto.Dantoc;
 import ims.dto.Doi;
 import ims.dto.Giadinh;
@@ -14,8 +16,8 @@ import ims.dto.Nhanvien;
 import ims.dto.Noisinhsong;
 import ims.dto.Phongban;
 import ims.dto.Quoctich;
-import ims.dto.To;
 import ims.dto.Tongiao;
+import ims.dto.Tophong;
 import ims.dto.Xahoi;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -32,7 +34,7 @@ import java.util.logging.Logger;
  */
 public class Employee extends javax.swing.JFrame implements WindowListener{
     
-    private List<To> listto;
+    private List<Tophong> listtophong;
     private List<Tongiao> listtongiao;
     private List<Xahoi> listxahoi;
     private List<Quoctich> listquoctich;
@@ -50,7 +52,6 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
         initComponents();
         stateButton(true);
          setInfoDialog();
-         setListDantoc(new DantocBLL().listAll());
     }
     public  void setInfoDialog() {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -87,13 +88,29 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
         tfemail.setText(String.valueOf(nhanvien.getEmail()));
         cbdantoc.setSelectedItem(nhanvien.getIddantoc());
         cbphong.setSelectedItem(nhanvien.getIdphongban());
+        cbdoi.setSelectedItem(nhanvien.getMadoi());
+        cbquoctich.setSelectedItem(nhanvien.getIdquoctich());
+    }
+    public void setListDoi(List<Doi> listdoi){
+        this.listdoi = listdoi;
+        for(Doi doi:listdoi){
+            cbdoi.addItem(String.valueOf(doi));
+        }
     }
     public void setListDantoc(List<Dantoc> listdantoc){
         this.listdantoc = listdantoc;
         for (Dantoc dantoc : listdantoc) {
 			cbdantoc.addItem(dantoc.toString()); 
+		}
+        
+    }
+    public void setListQuoctich(List<Quoctich> listquoctich){
+        this.listquoctich = listquoctich;
+        for (Quoctich quoctich : listquoctich) {
+			cbquoctich.addItem(quoctich.toString()); 
 		} 
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -179,6 +196,11 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
         jScrollPane1.setViewportView(jList1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         btNew.setText("Thêm");
         btNew.setPreferredSize(new java.awt.Dimension(75, 23));
@@ -565,6 +587,17 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
         // TODO add your handling code here:
     }//GEN-LAST:event_cbphongActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        try {
+            setListQuoctich(new QuoctichBLL().listAll());
+            setListDoi(new DoiBLL().listAll());
+            setListDantoc(new DantocBLL().listAll());
+        } catch (Exception ex) {
+            Logger.getLogger(Employee.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -676,13 +709,8 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
 
     @Override
     public void windowOpened(WindowEvent e) {
-        try {
-            setListDantoc(new DantocBLL().listAll());
-        } catch (Exception ex) {
-            Logger.getLogger(Employee.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+        
+}
     @Override
     public void windowClosing(WindowEvent e) {
     }

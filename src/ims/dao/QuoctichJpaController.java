@@ -16,7 +16,6 @@ import javax.persistence.criteria.Root;
 import ims.dto.Nhanvien;
 import ims.dto.Quoctich;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class QuoctichJpaController implements Serializable {
     }
 
     public void create(Quoctich quoctich) throws PreexistingEntityException, Exception {
-        if (quoctich.getNhanvienCollection() == null) {
-            quoctich.setNhanvienCollection(new ArrayList<Nhanvien>());
+        if (quoctich.getNhanvienList() == null) {
+            quoctich.setNhanvienList(new ArrayList<Nhanvien>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Nhanvien> attachedNhanvienCollection = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNhanvienToAttach : quoctich.getNhanvienCollection()) {
-                nhanvienCollectionNhanvienToAttach = em.getReference(nhanvienCollectionNhanvienToAttach.getClass(), nhanvienCollectionNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollection.add(nhanvienCollectionNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienList = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNhanvienToAttach : quoctich.getNhanvienList()) {
+                nhanvienListNhanvienToAttach = em.getReference(nhanvienListNhanvienToAttach.getClass(), nhanvienListNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienList.add(nhanvienListNhanvienToAttach);
             }
-            quoctich.setNhanvienCollection(attachedNhanvienCollection);
+            quoctich.setNhanvienList(attachedNhanvienList);
             em.persist(quoctich);
-            for (Nhanvien nhanvienCollectionNhanvien : quoctich.getNhanvienCollection()) {
-                Quoctich oldIdquoctichOfNhanvienCollectionNhanvien = nhanvienCollectionNhanvien.getIdquoctich();
-                nhanvienCollectionNhanvien.setIdquoctich(quoctich);
-                nhanvienCollectionNhanvien = em.merge(nhanvienCollectionNhanvien);
-                if (oldIdquoctichOfNhanvienCollectionNhanvien != null) {
-                    oldIdquoctichOfNhanvienCollectionNhanvien.getNhanvienCollection().remove(nhanvienCollectionNhanvien);
-                    oldIdquoctichOfNhanvienCollectionNhanvien = em.merge(oldIdquoctichOfNhanvienCollectionNhanvien);
+            for (Nhanvien nhanvienListNhanvien : quoctich.getNhanvienList()) {
+                Quoctich oldIdquoctichOfNhanvienListNhanvien = nhanvienListNhanvien.getIdquoctich();
+                nhanvienListNhanvien.setIdquoctich(quoctich);
+                nhanvienListNhanvien = em.merge(nhanvienListNhanvien);
+                if (oldIdquoctichOfNhanvienListNhanvien != null) {
+                    oldIdquoctichOfNhanvienListNhanvien.getNhanvienList().remove(nhanvienListNhanvien);
+                    oldIdquoctichOfNhanvienListNhanvien = em.merge(oldIdquoctichOfNhanvienListNhanvien);
                 }
             }
             em.getTransaction().commit();
@@ -79,36 +78,36 @@ public class QuoctichJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Quoctich persistentQuoctich = em.find(Quoctich.class, quoctich.getIdquoctich());
-            Collection<Nhanvien> nhanvienCollectionOld = persistentQuoctich.getNhanvienCollection();
-            Collection<Nhanvien> nhanvienCollectionNew = quoctich.getNhanvienCollection();
+            List<Nhanvien> nhanvienListOld = persistentQuoctich.getNhanvienList();
+            List<Nhanvien> nhanvienListNew = quoctich.getNhanvienList();
             List<String> illegalOrphanMessages = null;
-            for (Nhanvien nhanvienCollectionOldNhanvien : nhanvienCollectionOld) {
-                if (!nhanvienCollectionNew.contains(nhanvienCollectionOldNhanvien)) {
+            for (Nhanvien nhanvienListOldNhanvien : nhanvienListOld) {
+                if (!nhanvienListNew.contains(nhanvienListOldNhanvien)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienCollectionOldNhanvien + " since its idquoctich field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Nhanvien " + nhanvienListOldNhanvien + " since its idquoctich field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Nhanvien> attachedNhanvienCollectionNew = new ArrayList<Nhanvien>();
-            for (Nhanvien nhanvienCollectionNewNhanvienToAttach : nhanvienCollectionNew) {
-                nhanvienCollectionNewNhanvienToAttach = em.getReference(nhanvienCollectionNewNhanvienToAttach.getClass(), nhanvienCollectionNewNhanvienToAttach.getIdnhanvien());
-                attachedNhanvienCollectionNew.add(nhanvienCollectionNewNhanvienToAttach);
+            List<Nhanvien> attachedNhanvienListNew = new ArrayList<Nhanvien>();
+            for (Nhanvien nhanvienListNewNhanvienToAttach : nhanvienListNew) {
+                nhanvienListNewNhanvienToAttach = em.getReference(nhanvienListNewNhanvienToAttach.getClass(), nhanvienListNewNhanvienToAttach.getIdnhanvien());
+                attachedNhanvienListNew.add(nhanvienListNewNhanvienToAttach);
             }
-            nhanvienCollectionNew = attachedNhanvienCollectionNew;
-            quoctich.setNhanvienCollection(nhanvienCollectionNew);
+            nhanvienListNew = attachedNhanvienListNew;
+            quoctich.setNhanvienList(nhanvienListNew);
             quoctich = em.merge(quoctich);
-            for (Nhanvien nhanvienCollectionNewNhanvien : nhanvienCollectionNew) {
-                if (!nhanvienCollectionOld.contains(nhanvienCollectionNewNhanvien)) {
-                    Quoctich oldIdquoctichOfNhanvienCollectionNewNhanvien = nhanvienCollectionNewNhanvien.getIdquoctich();
-                    nhanvienCollectionNewNhanvien.setIdquoctich(quoctich);
-                    nhanvienCollectionNewNhanvien = em.merge(nhanvienCollectionNewNhanvien);
-                    if (oldIdquoctichOfNhanvienCollectionNewNhanvien != null && !oldIdquoctichOfNhanvienCollectionNewNhanvien.equals(quoctich)) {
-                        oldIdquoctichOfNhanvienCollectionNewNhanvien.getNhanvienCollection().remove(nhanvienCollectionNewNhanvien);
-                        oldIdquoctichOfNhanvienCollectionNewNhanvien = em.merge(oldIdquoctichOfNhanvienCollectionNewNhanvien);
+            for (Nhanvien nhanvienListNewNhanvien : nhanvienListNew) {
+                if (!nhanvienListOld.contains(nhanvienListNewNhanvien)) {
+                    Quoctich oldIdquoctichOfNhanvienListNewNhanvien = nhanvienListNewNhanvien.getIdquoctich();
+                    nhanvienListNewNhanvien.setIdquoctich(quoctich);
+                    nhanvienListNewNhanvien = em.merge(nhanvienListNewNhanvien);
+                    if (oldIdquoctichOfNhanvienListNewNhanvien != null && !oldIdquoctichOfNhanvienListNewNhanvien.equals(quoctich)) {
+                        oldIdquoctichOfNhanvienListNewNhanvien.getNhanvienList().remove(nhanvienListNewNhanvien);
+                        oldIdquoctichOfNhanvienListNewNhanvien = em.merge(oldIdquoctichOfNhanvienListNewNhanvien);
                     }
                 }
             }
@@ -142,12 +141,12 @@ public class QuoctichJpaController implements Serializable {
                 throw new NonexistentEntityException("The quoctich with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Nhanvien> nhanvienCollectionOrphanCheck = quoctich.getNhanvienCollection();
-            for (Nhanvien nhanvienCollectionOrphanCheckNhanvien : nhanvienCollectionOrphanCheck) {
+            List<Nhanvien> nhanvienListOrphanCheck = quoctich.getNhanvienList();
+            for (Nhanvien nhanvienListOrphanCheckNhanvien : nhanvienListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Quoctich (" + quoctich + ") cannot be destroyed since the Nhanvien " + nhanvienCollectionOrphanCheckNhanvien + " in its nhanvienCollection field has a non-nullable idquoctich field.");
+                illegalOrphanMessages.add("This Quoctich (" + quoctich + ") cannot be destroyed since the Nhanvien " + nhanvienListOrphanCheckNhanvien + " in its nhanvienList field has a non-nullable idquoctich field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

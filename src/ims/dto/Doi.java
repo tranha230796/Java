@@ -15,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -22,6 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "doi")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Doi.findAll", query = "SELECT d FROM Doi d")})
 public class Doi implements Serializable {
@@ -96,7 +98,7 @@ public class Doi implements Serializable {
 
     @Override
     public String toString() {
-        return "ims.dto.Doi[ madoi=" + madoi + " ]";
+        return Integer.toString(sodoi);
     }
     
 }

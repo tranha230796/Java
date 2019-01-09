@@ -6,17 +6,28 @@
 
 package ims.gui;
 
+import ims.bll.NhanvienBLL;
+import ims.dto.Nhanvien;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Persistence;
+import javax.swing.table.DefaultTableModel;
+
+
 
 /**
  *
  * @author NAT
  */
 public class EmployeeList extends javax.swing.JFrame {
-
+    private int row;
+    private DefaultTableModel model;
+    private List<Nhanvien> Nhanvien;
+    
     /** Creates new form EmployeeList */
     public EmployeeList() {
         initComponents();
@@ -52,6 +63,11 @@ public class EmployeeList extends javax.swing.JFrame {
         tableList = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jToolBar1.setRollover(true);
@@ -99,13 +115,10 @@ public class EmployeeList extends javax.swing.JFrame {
 
         tableList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Mã ", "Họ Tên", "Nơi sinh", "Giới tính"
+                "Mã ", "Họ Tên", "Nơi sinh"
             }
         ));
         jScrollPane1.setViewportView(tableList);
@@ -128,6 +141,32 @@ public class EmployeeList extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btNewActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        try {
+            // TODO add your handling code here:
+            model = (DefaultTableModel) tableList.getModel();
+            Nhanvien = new ArrayList<>();
+            
+            List<Nhanvien> listEmp = new NhanvienBLL().findNhanvienEntities();
+            row = 0;
+            
+            for(Nhanvien nhanvien : listEmp) {
+                addNhanvien(nhanvien);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(EmployeeList.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowOpened
+    private void addNhanvien(Nhanvien nhanvien) {
+        model.addRow(new Object[0]);
+        String Name = nhanvien.getHoten();
+        model.setValueAt(nhanvien.getIdnhanvien(), row, 0);
+        model.setValueAt(Name, row, 1);
+        model.setValueAt(nhanvien.getDienthoai(), row, 2);
+    
+        nhanvien.add(nhanvien);
+    }
+    
     /**
      * @param args the command line arguments
      */

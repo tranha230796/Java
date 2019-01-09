@@ -21,6 +21,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -28,6 +29,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "nhanvien")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Nhanvien.findAll", query = "SELECT n FROM Nhanvien n")})
 public class Nhanvien implements Serializable {
@@ -100,7 +102,7 @@ public class Nhanvien implements Serializable {
     @ManyToOne(optional = false)
     private Xahoi idxahoi;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "nhanvien")
-    private To to;
+    private Tophong tophong;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "nhanvien")
     private Doi doi;
 
@@ -287,12 +289,12 @@ public class Nhanvien implements Serializable {
         this.idxahoi = idxahoi;
     }
 
-    public To getTo() {
-        return to;
+    public Tophong getTophong() {
+        return tophong;
     }
 
-    public void setTo(To to) {
-        this.to = to;
+    public void setTophong(Tophong tophong) {
+        this.tophong = tophong;
     }
 
     public Doi getDoi() {
@@ -326,6 +328,10 @@ public class Nhanvien implements Serializable {
     @Override
     public String toString() {
         return "ims.dto.Nhanvien[ idnhanvien=" + idnhanvien + " ]";
+    }
+
+    public void add(Nhanvien nhanvien) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
