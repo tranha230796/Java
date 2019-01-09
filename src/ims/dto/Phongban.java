@@ -100,7 +100,7 @@ public class Phongban implements Serializable {
 
     @Override
     public String toString() {
-        return "ims.dto.Phongban[ idphongban=" + idphongban + " ]";
+        return ten;
     }
     
 }

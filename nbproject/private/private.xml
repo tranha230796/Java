@@ -4,8 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/E:/DeTaiJava/InventoryManagement/InventoryManagement/src/ims/gui/Employee.java</file>
+            <file>file:/E:/DeTaiJava/InventoryManagement/InventoryManagement/src/ims/dto/Nhanvien.java</file>
+            <file>file:/E:/DeTaiJava/InventoryManagement/InventoryManagement/src/ims/dto/Xahoi.java</file>
             <file>file:/E:/DeTaiJava/InventoryManagement/InventoryManagement/src/ims/bll/NhanvienBLL.java</file>
-            <file>file:/E:/DeTaiJava/InventoryManagement/InventoryManagement/src/ims/gui/EmployeeList.java</file>
+            <file>file:/E:/DeTaiJava/InventoryManagement/InventoryManagement/src/ims/dto/Giadinh.java</file>
         </group>
     </open-files>
 </project-private>

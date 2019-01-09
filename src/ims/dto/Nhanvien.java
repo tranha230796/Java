@@ -327,7 +327,7 @@ public class Nhanvien implements Serializable {
 
     @Override
     public String toString() {
-        return "ims.dto.Nhanvien[ idnhanvien=" + idnhanvien + " ]";
+        return "ims.dto.Nhanvien[ idnhanvien=" + idnhanvien + " "+gioitinh+" ]";
     }
 
     public void add(Nhanvien nhanvien) {

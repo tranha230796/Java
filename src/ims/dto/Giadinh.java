@@ -100,7 +100,7 @@ public class Giadinh implements Serializable {
 
     @Override
     public String toString() {
-        return "ims.dto.Giadinh[ idgiadinh=" + idgiadinh + " ]";
+        return tengiadinh;
     }
     
 }

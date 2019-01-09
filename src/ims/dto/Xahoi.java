@@ -100,7 +100,7 @@ public class Xahoi implements Serializable {
 
     @Override
     public String toString() {
-        return "ims.dto.Xahoi[ idxahoi=" + idxahoi + " ]";
+        return tenxahoi;
     }
     
 }

@@ -159,7 +159,7 @@
                                   <Component id="tfnoisinh" alignment="0" max="32767" attributes="0"/>
                                   <Component id="tfnguyenquan" alignment="0" max="32767" attributes="0"/>
                                   <Component id="tfma" max="32767" attributes="0"/>
-                                  <Component id="jComboBox7" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cbgioitinh" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -251,7 +251,7 @@
                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cbto" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jComboBox7" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbgioitinh" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -532,7 +532,7 @@
         <Property name="text" type="java.lang.String" value="H&#xf4;n nh&#xe2;n"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="jComboBox7">
+    <Component class="javax.swing.JComboBox" name="cbgioitinh">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>

@@ -7,12 +7,18 @@ package ims.gui;
 
 import ims.bll.DantocBLL;
 import ims.bll.DoiBLL;
+import ims.bll.GiadinhBLL;
 import ims.bll.NhanvienBLL;
+import ims.bll.PhongbanBLL;
 import ims.bll.QuoctichBLL;
+import ims.bll.TongiaoBLL;
+import ims.bll.TophongBLL;
+import ims.bll.XahoiBLL;
 import ims.dto.Dantoc;
 import ims.dto.Doi;
 import ims.dto.Giadinh;
 import ims.dto.Nhanvien;
+import ims.dto.Nhanvien_;
 import ims.dto.Noisinhsong;
 import ims.dto.Phongban;
 import ims.dto.Quoctich;
@@ -42,6 +48,7 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
     private List<Giadinh> listgiadinh;
     private List<Dantoc> listdantoc;
     private List<Doi> listdoi;
+    private List<Nhanvien> listnhanvien;
     private List<Noisinhsong> listnoisinhsong;
     private Nhanvien nhanvien;
 
@@ -90,6 +97,10 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
         cbphong.setSelectedItem(nhanvien.getIdphongban());
         cbdoi.setSelectedItem(nhanvien.getMadoi());
         cbquoctich.setSelectedItem(nhanvien.getIdquoctich());
+        cbto.setSelectedItem(nhanvien.getMato());
+        cbtongiao.setSelectedItem(nhanvien.getIdtongiao());
+        cbgiadinh.setSelectedItem(nhanvien.getIdgiadinh());
+        cbxahoi.setSelectedItem(nhanvien.getIdxahoi());
     }
     public void setListDoi(List<Doi> listdoi){
         this.listdoi = listdoi;
@@ -104,13 +115,50 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
 		}
         
     }
+    public void setListTongiao(List<Tongiao> listtongiao){
+        this.listtongiao = listtongiao;
+        for (Tongiao tongiao : listtongiao) {
+			cbtongiao.addItem(tongiao.toString()); 
+		}
+        
+    }
+    
     public void setListQuoctich(List<Quoctich> listquoctich){
         this.listquoctich = listquoctich;
         for (Quoctich quoctich : listquoctich) {
 			cbquoctich.addItem(quoctich.toString()); 
 		} 
     }
-    
+    public void setListPhongban(List<Phongban> listphongban){
+        this.listphongban = listphongban;
+        for(Phongban phongban : listphongban){
+            cbphong.addItem(phongban.toString());
+        }
+    }
+    public void setListNhanvien(List<Nhanvien> listnhanvien){
+        this.listnhanvien = listnhanvien;
+        for(Nhanvien nhanvien : listnhanvien){
+            cbgioitinh.addItem(String.valueOf(nhanvien));
+        }
+    }
+    public void setListTophong(List<Tophong> listtophong){
+        this.listtophong = listtophong;
+        for(Tophong tophong : listtophong){
+            cbto.addItem(String.valueOf(tophong));
+        }
+    }
+    public void setListGiadinh(List<Giadinh> listgiadinh){
+        this.listgiadinh = listgiadinh;
+        for(Giadinh giadinh : listgiadinh){
+            cbgiadinh.addItem(giadinh.toString());
+        }
+    }
+    public void setListXahoi(List<Xahoi> listxahoi){
+        this.listxahoi = listxahoi;
+        for(Xahoi xahoi : listxahoi){
+            cbxahoi.addItem(xahoi.toString());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,7 +195,7 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
         jLabel11 = new javax.swing.JLabel();
         cbtongiao = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
-        jComboBox7 = new javax.swing.JComboBox<>();
+        cbgioitinh = new javax.swing.JComboBox<>();
         cbhonnhan = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
         tfnoio = new javax.swing.JTextField();
@@ -408,7 +456,7 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
                                     .addComponent(tfnoisinh)
                                     .addComponent(tfnguyenquan)
                                     .addComponent(tfma)
-                                    .addComponent(jComboBox7, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(cbgioitinh, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -480,7 +528,7 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
                     .addComponent(jLabel8)
                     .addComponent(cbto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbgioitinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -590,6 +638,12 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         try {
+            
+            setListXahoi(new XahoiBLL().listAll());
+            setListGiadinh(new GiadinhBLL().listAll());
+            setListTongiao(new TongiaoBLL().listAll());
+            setListTophong(new TophongBLL().listAll());
+            setListPhongban(new PhongbanBLL().listAll());
             setListQuoctich(new QuoctichBLL().listAll());
             setListDoi(new DoiBLL().listAll());
             setListDantoc(new DantocBLL().listAll());
@@ -648,6 +702,7 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
     private javax.swing.JComboBox<String> cbdantoc;
     private javax.swing.JComboBox<String> cbdoi;
     private javax.swing.JComboBox<String> cbgiadinh;
+    private javax.swing.JComboBox<String> cbgioitinh;
     private javax.swing.JComboBox<String> cbhonnhan;
     private javax.swing.JComboBox<String> cbphong;
     private javax.swing.JComboBox<String> cbquoctich;
@@ -656,7 +711,6 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
     private javax.swing.JComboBox<String> cbxahoi;
     private javax.swing.JComboBox<String> jComboBox11;
     private javax.swing.JComboBox<String> jComboBox12;
-    private javax.swing.JComboBox<String> jComboBox7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

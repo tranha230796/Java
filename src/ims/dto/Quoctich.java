@@ -100,7 +100,7 @@ public class Quoctich implements Serializable {
 
     @Override
     public String toString() {
-        return "ims.dto.Quoctich[ idquoctich=" + idquoctich + " ]";
+        return ten;
     }
     
 }

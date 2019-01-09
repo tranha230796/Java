@@ -100,7 +100,7 @@ public class Tongiao implements Serializable {
 
     @Override
     public String toString() {
-        return "ims.dto.Tongiao[ idtongiao=" + idtongiao + " ]";
+        return ten;
     }
     
 }
