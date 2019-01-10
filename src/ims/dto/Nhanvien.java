@@ -7,6 +7,7 @@ package ims.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,6 +36,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Nhanvien implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static void add(List<Nhanvien> listnhanvien) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     @Id
     @Basic(optional = false)
     @Column(name = "idnhanvien", nullable = false)

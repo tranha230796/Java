@@ -39,6 +39,21 @@ import java.util.logging.Logger;
  * @author NAT
  */
 public class Employee extends javax.swing.JFrame implements WindowListener{
+
+    private void activeForm(boolean b) {
+         cbhonnhan.setEnabled(isDisplayable());
+    }
+
+    private void cleanForm() {
+         //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void validForm() {
+         //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public static enum ACTION {INSERT, EDIT, VIEW};
+    private ACTION action;
     
     private List<Tophong> listtophong;
     private List<Tongiao> listtongiao;
@@ -66,6 +81,10 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
         int y = (int) ((dimension.getHeight() - getHeight()) / 2);
         setLocation(x, y);        
         setResizable(false);
+    }
+    @Override
+    public void dispose() {
+        super.dispose();
     }
     public void stateButton(boolean value){
         
@@ -274,6 +293,11 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
 
         btClose.setText("Thoát");
         btClose.setPreferredSize(new java.awt.Dimension(75, 23));
+        btClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCloseActionPerformed(evt);
+            }
+        });
 
         btSave.setText("Ghi");
         btSave.setPreferredSize(new java.awt.Dimension(75, 23));
@@ -377,6 +401,13 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 356, Short.MAX_VALUE)
+                                .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btNew, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel23)
@@ -389,9 +420,11 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
                                     .addComponent(jLabel9)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel28)
-                                    .addComponent(jLabel5))
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel2))
                                 .addGap(20, 20, 20)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfhoten)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(cbquoctich, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -456,20 +489,7 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
                                     .addComponent(tfnoisinh)
                                     .addComponent(tfnguyenquan)
                                     .addComponent(tfma)
-                                    .addComponent(cbgioitinh, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btNew, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(tfhoten, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(cbgioitinh, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -613,18 +633,36 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
 
     private void btNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNewActionPerformed
         stateButton(false);
+        cleanForm();
+        activeForm(true);
+        action = ACTION.INSERT;
     }//GEN-LAST:event_btNewActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         stateButton(true);
+          validForm();
+            setNhanvien(nhanvien);
+            if (action == ACTION.INSERT) {
+            try {
+                new NhanvienBLL().create(nhanvien);
+            } catch (Exception ex) {
+                Logger.getLogger(Employee.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                listnhanvien.add(nhanvien);
+          
     }//GEN-LAST:event_btSaveActionPerformed
-
+    }
     private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
         stateButton(false);
+        activeForm(true);
+        tfma.setEditable(false);
+        action = ACTION.EDIT;
     }//GEN-LAST:event_btEditActionPerformed
 
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
-         stateButton(true);// TODO add your handling code here:
+         stateButton(true);
+         activeForm(false);
+         dispose();
     }//GEN-LAST:event_btCancelActionPerformed
 
     private void jComboBox12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox12ActionPerformed
@@ -651,6 +689,10 @@ public class Employee extends javax.swing.JFrame implements WindowListener{
             Logger.getLogger(Employee.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowOpened
+
+    private void btCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCloseActionPerformed
+                dispose();
+    }//GEN-LAST:event_btCloseActionPerformed
 
     /**
      * @param args the command line arguments

@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 public class EmployeeList extends javax.swing.JFrame {
     private int row;
     private DefaultTableModel model;
-    private List<Nhanvien> Nhanvien;
+    private List<Nhanvien> listnhanvien;
     
     /** Creates new form EmployeeList */
     public EmployeeList() {
@@ -59,6 +59,7 @@ public class EmployeeList extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         jButton5 = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableList = new javax.swing.JTable();
 
@@ -111,6 +112,17 @@ public class EmployeeList extends javax.swing.JFrame {
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton5);
 
+        btnUpdate.setText("Cập nhật");
+        btnUpdate.setFocusable(false);
+        btnUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnUpdate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnUpdate);
+
         getContentPane().add(jToolBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 830, 25));
 
         tableList.setModel(new javax.swing.table.DefaultTableModel(
@@ -145,18 +157,23 @@ public class EmployeeList extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             model = (DefaultTableModel) tableList.getModel();
-            Nhanvien = new ArrayList<>();
+            listnhanvien = new ArrayList<>();
             
-            List<Nhanvien> listEmp = new NhanvienBLL().findNhanvienEntities();
+            List<Nhanvien> listnhanvien = new NhanvienBLL().findNhanvienEntities();
             row = 0;
             
-            for(Nhanvien nhanvien : listEmp) {
+            for(Nhanvien nhanvien : listnhanvien) {
                 addNhanvien(nhanvien);
             }
+            
         } catch (Exception ex) {
             Logger.getLogger(EmployeeList.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        initTable();
+    }//GEN-LAST:event_btnUpdateActionPerformed
     private void addNhanvien(Nhanvien nhanvien) {
         model.addRow(new Object[0]);
         String Name = nhanvien.getHoten();
@@ -164,7 +181,8 @@ public class EmployeeList extends javax.swing.JFrame {
         model.setValueAt(Name, row, 1);
         model.setValueAt(nhanvien.getDienthoai(), row, 2);
     
-        nhanvien.add(nhanvien);
+        listnhanvien.add(nhanvien);
+        row++;
     }
     
     /**
@@ -204,6 +222,7 @@ public class EmployeeList extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btNew;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -216,5 +235,15 @@ public class EmployeeList extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTable tableList;
     // End of variables declaration//GEN-END:variables
+
+    private void initTable() {
+         //To change body of generated methods, choose Tools | Templates.
+        model.setRowCount(0);
+        row = 0;
+        
+        for(Nhanvien nhanvien : listnhanvien) {
+            addNhanvien(nhanvien);
+        }
+    }
 
 }
